@@ -1,0 +1,5 @@
+$env:DOTNET_ROOT = "C:\Users\admin\AppData\Local\Microsoft\dotnet"
+$env:PATH = "$env:DOTNET_ROOT;$($env:PATH -split ';' | Where-Object { $_ -notmatch 'scoop' } -join ';')"
+$env:MSBUILD_EXE_PATH = "$env:DOTNET_ROOT\sdk\8.0.420\MSBuild.dll"
+$env:MSBuildSDKsPath = "$env:DOTNET_ROOT\sdk\8.0.420\Sdks"
+dotnet run --project MiniPlantaJugos --Urls "http://localhost:5000"

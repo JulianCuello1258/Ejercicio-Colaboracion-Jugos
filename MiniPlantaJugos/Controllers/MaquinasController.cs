@@ -32,8 +32,6 @@ namespace MiniPlantaJugos.Controllers
         {
             if (id == null) return NotFound();
             Maquina? maquina = await _context.Maquinas
-                .Include(m => m.Usuarios)
-                .Include(m => m.Incidentes)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (maquina == null) return NotFound();
             return View(maquina);

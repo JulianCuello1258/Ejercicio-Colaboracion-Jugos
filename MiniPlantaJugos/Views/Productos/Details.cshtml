@@ -1,0 +1,33 @@
+@model MiniPlantaJugos.Models.Producto
+@{
+    ViewData["Title"] = "Detalle Producto";
+}
+
+<h2><i class="bi bi-box-seam"></i> Detalle del Producto</h2>
+
+<div class="card mt-3" style="max-width: 600px;">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-4">Id</dt>
+            <dd class="col-sm-8">@Model.Id</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Nombre)</dt>
+            <dd class="col-sm-8">@Model.Nombre</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(m => m.TipoEnvase)</dt>
+            <dd class="col-sm-8">@Model.TipoEnvase</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(m => m.PrecioEstimado)</dt>
+            <dd class="col-sm-8">$@Model.PrecioEstimado.ToString("N2")</dd>
+            <dt class="col-sm-4">Estado</dt>
+            <dd class="col-sm-8">
+                @if (Model.Activo)
+                {
+                    <span class="badge bg-success">Activo</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">Inactivo</span>
+                }
+            </dd>
+        </dl>
+    </div>
+</div>
+<a asp-action="Index" class="btn btn-secondary mt-3"><i class="bi bi-arrow-left"></i> Volver</a>

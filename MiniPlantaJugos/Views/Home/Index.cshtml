@@ -26,45 +26,4 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4 col-lg-3">
-        <div class="card text-center p-3">
-            <div class="card-body">
-                <i class="bi bi-clipboard-check fs-1 text-warning"></i>
-                <h5 class="mt-2">Órdenes Activas</h5>
-                <h2 class="fw-bold text-warning">@ViewBag.OrdenesEnProceso</h2>
-                <small class="text-muted">Pendientes + En Proceso</small><br/>
-                <a asp-controller="Ordenes" asp-action="Index" class="btn btn-outline-warning btn-sm mt-2">Ver todas</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 col-lg-3">
-        <div class="card text-center p-3">
-            <div class="card-body">
-                <i class="bi bi-exclamation-triangle fs-1 text-danger"></i>
-                <h5 class="mt-2">Incidentes Abiertos</h5>
-                <h2 class="fw-bold text-danger">@ViewBag.IncidentesAbiertos</h2>
-                <a asp-controller="Incidentes" asp-action="Index" asp-route-filtroEstado="Abierto" class="btn btn-outline-danger btn-sm mt-2">Ver abiertos</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 col-lg-3">
-        <div class="card text-center p-3">
-            <div class="card-body">
-                <i class="bi bi-shield-x fs-1 text-danger"></i>
-                <h5 class="mt-2">Controles Rechazados</h5>
-                <h2 class="fw-bold text-danger">@ViewBag.ControlesRechazados</h2>
-                <a asp-controller="ControlCalidad" asp-action="Index" asp-route-filtroResultado="Rechazado" class="btn btn-outline-danger btn-sm mt-2">Ver rechazados</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 col-lg-3">
-        <div class="card text-center p-3">
-            <div class="card-body">
-                <i class="bi bi-people-fill fs-1 text-info"></i>
-                <h5 class="mt-2">Usuarios</h5>
-                <h2 class="fw-bold text-info">@ViewBag.TotalUsuarios</h2>
-                <a asp-controller="Usuarios" asp-action="Index" class="btn btn-outline-info btn-sm mt-2">Ver todos</a>
-            </div>
-        </div>
-    </div>
 </div>

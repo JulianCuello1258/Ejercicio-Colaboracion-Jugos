@@ -20,7 +20,5 @@ namespace MiniPlantaJugos.Models
         [Display(Name = "Activo")]
         public bool Activo { get; set; } = true;
 
-        // Navegación
-        public ICollection<Orden> Ordenes { get; set; } = new List<Orden>();
     }
 }

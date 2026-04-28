@@ -21,9 +21,5 @@ namespace MiniPlantaJugos.Models
         [DataType(DataType.Currency)]
         public decimal Precio { get; set; }
 
-        // Navegación
-        public ICollection<Orden> Ordenes { get; set; } = new List<Orden>();
-        public ICollection<Incidente> Incidentes { get; set; } = new List<Incidente>();
-        public ICollection<Usuario> Usuarios { get; set; } = new List<Usuario>();
     }
 }

@@ -23,31 +23,6 @@
             <dd class="col-sm-8"><span class="badge @badgeClass">@Model.Estado</span></dd>
         </dl>
 
-        @if (Model.Usuarios.Any())
-        {
-            <h5 class="mt-3">Usuarios asignados</h5>
-            <ul class="list-group">
-                @foreach (var u in Model.Usuarios)
-                {
-                    <li class="list-group-item">@u.Nombre (@u.Cargo)</li>
-                }
-            </ul>
-        }
-
-        @if (Model.Incidentes.Any())
-        {
-            <h5 class="mt-3">Incidentes</h5>
-            <ul class="list-group">
-                @foreach (var inc in Model.Incidentes)
-                {
-                    string incBadge = inc.Estado == EstadoIncidente.Abierto ? "bg-danger" : "bg-success";
-                    <li class="list-group-item d-flex justify-content-between">
-                        @inc.Descripcion
-                        <span class="badge @incBadge">@inc.Estado</span>
-                    </li>
-                }
-            </ul>
-        }
     </div>
 </div>
 <a asp-action="Index" class="btn btn-secondary mt-3"><i class="bi bi-arrow-left"></i> Volver</a>

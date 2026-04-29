@@ -6,29 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MiniPlantaJugos.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateMaquinaFields : Migration
+    public partial class InitialRestore : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Maquinas",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Nombre = table.Column<string>(type: "TEXT", nullable: false),
-                    Sector = table.Column<string>(type: "TEXT", nullable: false),
-                    Planta = table.Column<string>(type: "TEXT", nullable: false),
-                    NumeroMaquina = table.Column<int>(type: "INTEGER", nullable: false),
-                    Estado = table.Column<string>(type: "TEXT", nullable: false),
-                    Precio = table.Column<decimal>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Maquinas", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Productos",
                 columns: table => new
@@ -52,11 +34,36 @@ namespace MiniPlantaJugos.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Nombre = table.Column<string>(type: "TEXT", nullable: false),
-                    Cargo = table.Column<string>(type: "TEXT", nullable: false)
+                    Cargo = table.Column<string>(type: "TEXT", nullable: false),
+                    Contrasenia = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Usuarios", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Maquinas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Nombre = table.Column<string>(type: "TEXT", nullable: false),
+                    Sector = table.Column<string>(type: "TEXT", nullable: false),
+                    Planta = table.Column<string>(type: "TEXT", nullable: false),
+                    NumeroMaquina = table.Column<int>(type: "INTEGER", nullable: false),
+                    Estado = table.Column<string>(type: "TEXT", nullable: false),
+                    Precio = table.Column<decimal>(type: "TEXT", nullable: false),
+                    UsuarioId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Maquinas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Maquinas_Usuarios_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "Usuarios",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -79,73 +86,49 @@ namespace MiniPlantaJugos.Migrations
                         column: x => x.MaquinaId,
                         principalTable: "Maquinas",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Incidentes_Usuarios_UsuarioId",
                         column: x => x.UsuarioId,
                         principalTable: "Usuarios",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MaquinaUsuario",
-                columns: table => new
-                {
-                    MaquinasId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UsuariosId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MaquinaUsuario", x => new { x.MaquinasId, x.UsuariosId });
-                    table.ForeignKey(
-                        name: "FK_MaquinaUsuario_Maquinas_MaquinasId",
-                        column: x => x.MaquinasId,
-                        principalTable: "Maquinas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MaquinaUsuario_Usuarios_UsuariosId",
-                        column: x => x.UsuariosId,
-                        principalTable: "Usuarios",
-                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Ordenes",
+                name: "OrdenesProd",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     ProductoId = table.Column<int>(type: "INTEGER", nullable: false),
                     MaquinaId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UsuarioId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CantidadUnidades = table.Column<int>(type: "INTEGER", nullable: false),
-                    FechaProduccion = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Estado = table.Column<string>(type: "TEXT", nullable: false)
+                    CantUnidades = table.Column<int>(type: "INTEGER", nullable: false),
+                    Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Estado = table.Column<string>(type: "TEXT", nullable: false),
+                    Usuario = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    UsuarioId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ordenes", x => x.Id);
+                    table.PrimaryKey("PK_OrdenesProd", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Ordenes_Maquinas_MaquinaId",
+                        name: "FK_OrdenesProd_Maquinas_MaquinaId",
                         column: x => x.MaquinaId,
                         principalTable: "Maquinas",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Ordenes_Productos_ProductoId",
+                        name: "FK_OrdenesProd_Productos_ProductoId",
                         column: x => x.ProductoId,
                         principalTable: "Productos",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Ordenes_Usuarios_UsuarioId",
+                        name: "FK_OrdenesProd_Usuarios_UsuarioId",
                         column: x => x.UsuarioId,
                         principalTable: "Usuarios",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -154,26 +137,26 @@ namespace MiniPlantaJugos.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    OrdenId = table.Column<int>(type: "INTEGER", nullable: false),
+                    OrdenProdId = table.Column<int>(type: "INTEGER", nullable: false),
                     Resultado = table.Column<string>(type: "TEXT", nullable: false),
-                    Observacion = table.Column<string>(type: "TEXT", nullable: true),
-                    FechaControl = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Observacion = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ControlesCalidad", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ControlesCalidad_Ordenes_OrdenId",
-                        column: x => x.OrdenId,
-                        principalTable: "Ordenes",
+                        name: "FK_ControlesCalidad_OrdenesProd_OrdenProdId",
+                        column: x => x.OrdenProdId,
+                        principalTable: "OrdenesProd",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ControlesCalidad_OrdenId",
+                name: "IX_ControlesCalidad_OrdenProdId",
                 table: "ControlesCalidad",
-                column: "OrdenId");
+                column: "OrdenProdId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Incidentes_MaquinaId",
@@ -186,23 +169,23 @@ namespace MiniPlantaJugos.Migrations
                 column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MaquinaUsuario_UsuariosId",
-                table: "MaquinaUsuario",
-                column: "UsuariosId");
+                name: "IX_Maquinas_UsuarioId",
+                table: "Maquinas",
+                column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ordenes_MaquinaId",
-                table: "Ordenes",
+                name: "IX_OrdenesProd_MaquinaId",
+                table: "OrdenesProd",
                 column: "MaquinaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ordenes_ProductoId",
-                table: "Ordenes",
+                name: "IX_OrdenesProd_ProductoId",
+                table: "OrdenesProd",
                 column: "ProductoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ordenes_UsuarioId",
-                table: "Ordenes",
+                name: "IX_OrdenesProd_UsuarioId",
+                table: "OrdenesProd",
                 column: "UsuarioId");
         }
 
@@ -216,10 +199,7 @@ namespace MiniPlantaJugos.Migrations
                 name: "Incidentes");
 
             migrationBuilder.DropTable(
-                name: "MaquinaUsuario");
-
-            migrationBuilder.DropTable(
-                name: "Ordenes");
+                name: "OrdenesProd");
 
             migrationBuilder.DropTable(
                 name: "Maquinas");

@@ -11,8 +11,8 @@ using MiniPlantaJugos.Data;
 namespace MiniPlantaJugos.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260429000058_UpdateMaquinaFields")]
-    partial class UpdateMaquinaFields
+    [Migration("20260429013142_InitialRestore")]
+    partial class InitialRestore
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,34 +20,20 @@ namespace MiniPlantaJugos.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
 
-            modelBuilder.Entity("MaquinaUsuario", b =>
-                {
-                    b.Property<int>("MaquinasId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("UsuariosId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("MaquinasId", "UsuariosId");
-
-                    b.HasIndex("UsuariosId");
-
-                    b.ToTable("MaquinaUsuario");
-                });
-
             modelBuilder.Entity("MiniPlantaJugos.Models.ControlCalidad", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("FechaControl")
+                    b.Property<DateTime>("Fecha")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Observacion")
+                        .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("OrdenId")
+                    b.Property<int>("OrdenProdId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Resultado")
@@ -56,7 +42,7 @@ namespace MiniPlantaJugos.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrdenId");
+                    b.HasIndex("OrdenProdId");
 
                     b.ToTable("ControlesCalidad");
                 });
@@ -122,25 +108,30 @@ namespace MiniPlantaJugos.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("UsuarioId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Maquinas");
                 });
 
-            modelBuilder.Entity("MiniPlantaJugos.Models.Orden", b =>
+            modelBuilder.Entity("MiniPlantaJugos.Models.OrdenProd", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CantidadUnidades")
+                    b.Property<int>("CantUnidades")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Estado")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("FechaProduccion")
+                    b.Property<DateTime>("Fecha")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("MaquinaId")
@@ -149,7 +140,12 @@ namespace MiniPlantaJugos.Migrations
                     b.Property<int>("ProductoId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UsuarioId")
+                    b.Property<string>("Usuario")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("UsuarioId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -160,7 +156,7 @@ namespace MiniPlantaJugos.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Ordenes");
+                    b.ToTable("OrdenesProd");
                 });
 
             modelBuilder.Entity("MiniPlantaJugos.Models.Producto", b =>
@@ -198,6 +194,9 @@ namespace MiniPlantaJugos.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Contrasenia")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -207,98 +206,71 @@ namespace MiniPlantaJugos.Migrations
                     b.ToTable("Usuarios");
                 });
 
-            modelBuilder.Entity("MaquinaUsuario", b =>
-                {
-                    b.HasOne("MiniPlantaJugos.Models.Maquina", null)
-                        .WithMany()
-                        .HasForeignKey("MaquinasId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MiniPlantaJugos.Models.Usuario", null)
-                        .WithMany()
-                        .HasForeignKey("UsuariosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("MiniPlantaJugos.Models.ControlCalidad", b =>
                 {
-                    b.HasOne("MiniPlantaJugos.Models.Orden", "Orden")
-                        .WithMany("ControlesCalidad")
-                        .HasForeignKey("OrdenId")
+                    b.HasOne("MiniPlantaJugos.Models.OrdenProd", "ProdRevisada")
+                        .WithMany()
+                        .HasForeignKey("OrdenProdId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Orden");
+                    b.Navigation("ProdRevisada");
                 });
 
             modelBuilder.Entity("MiniPlantaJugos.Models.Incidente", b =>
                 {
                     b.HasOne("MiniPlantaJugos.Models.Maquina", "Maquina")
-                        .WithMany("Incidentes")
+                        .WithMany()
                         .HasForeignKey("MaquinaId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MiniPlantaJugos.Models.Usuario", "Usuario")
                         .WithMany("Incidentes")
                         .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Maquina");
-
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("MiniPlantaJugos.Models.Orden", b =>
-                {
-                    b.HasOne("MiniPlantaJugos.Models.Maquina", "Maquina")
-                        .WithMany("Ordenes")
-                        .HasForeignKey("MaquinaId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("MiniPlantaJugos.Models.Producto", "Producto")
-                        .WithMany("Ordenes")
-                        .HasForeignKey("ProductoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("MiniPlantaJugos.Models.Usuario", "Usuario")
-                        .WithMany("Ordenes")
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Maquina");
-
-                    b.Navigation("Producto");
 
                     b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("MiniPlantaJugos.Models.Maquina", b =>
                 {
-                    b.Navigation("Incidentes");
-
-                    b.Navigation("Ordenes");
+                    b.HasOne("MiniPlantaJugos.Models.Usuario", null)
+                        .WithMany("Maquinas")
+                        .HasForeignKey("UsuarioId");
                 });
 
-            modelBuilder.Entity("MiniPlantaJugos.Models.Orden", b =>
+            modelBuilder.Entity("MiniPlantaJugos.Models.OrdenProd", b =>
                 {
-                    b.Navigation("ControlesCalidad");
-                });
+                    b.HasOne("MiniPlantaJugos.Models.Maquina", "Maquina")
+                        .WithMany()
+                        .HasForeignKey("MaquinaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("MiniPlantaJugos.Models.Producto", b =>
-                {
-                    b.Navigation("Ordenes");
+                    b.HasOne("MiniPlantaJugos.Models.Producto", "Producto")
+                        .WithMany()
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MiniPlantaJugos.Models.Usuario", null)
+                        .WithMany("Ordenes")
+                        .HasForeignKey("UsuarioId");
+
+                    b.Navigation("Maquina");
+
+                    b.Navigation("Producto");
                 });
 
             modelBuilder.Entity("MiniPlantaJugos.Models.Usuario", b =>
                 {
                     b.Navigation("Incidentes");
+
+                    b.Navigation("Maquinas");
 
                     b.Navigation("Ordenes");
                 });

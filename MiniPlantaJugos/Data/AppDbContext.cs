@@ -11,6 +11,8 @@ namespace MiniPlantaJugos.Data
         public DbSet<Maquina> Maquinas { get; set; }
         public DbSet<OrdenProd> OrdenesProd { get; set; }
         public DbSet<ControlCalidad> ControlesCalidad { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Incidente> Incidentes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,6 +29,18 @@ namespace MiniPlantaJugos.Data
 
             modelBuilder.Entity<ControlCalidad>()
                 .Property(c => c.Resultado)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<Usuario>()
+                .Property(u => u.Cargo)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<Incidente>()
+                .Property(i => i.Severidad)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<Incidente>()
+                .Property(i => i.Estado)
                 .HasConversion<string>();
         }
     }

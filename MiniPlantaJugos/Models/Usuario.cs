@@ -19,7 +19,7 @@ namespace MiniPlantaJugos.Models
 
         // Navegación many-to-many con Maquina
         public ICollection<Maquina> Maquinas { get; set; } = new List<Maquina>();
-        public ICollection<Orden> Ordenes { get; set; } = new List<Orden>();
+        public ICollection<OrdenProd> Ordenes { get; set; } = new List<OrdenProd>();
         public ICollection<Incidente> Incidentes { get; set; } = new List<Incidente>();
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

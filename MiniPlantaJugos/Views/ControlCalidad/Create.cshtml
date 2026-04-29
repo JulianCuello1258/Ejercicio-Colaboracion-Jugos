@@ -1,0 +1,60 @@
+@model MiniPlantaJugos.Models.ControlCalidad
+@using MiniPlantaJugos.Enums
+
+@{
+    ViewData["Title"] = "Registrar Control de Calidad";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card border-info">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0">Registrar Control de Calidad</h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label asp-for="OrdenProdId" class="form-label"></label>
+                            <select asp-for="OrdenProdId" class="form-select" asp-items="ViewBag.OrdenProdId">
+                                <option value="">Seleccione una producción finalizada</option>
+                            </select>
+                            <span asp-validation-for="OrdenProdId" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Resultado" class="form-label"></label>
+                            <select asp-for="Resultado" class="form-select" asp-items="Html.GetEnumSelectList<ResultadoControl>()">
+                            </select>
+                            <span asp-validation-for="Resultado" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Fecha" class="form-label"></label>
+                            <input asp-for="Fecha" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            <span asp-validation-for="Fecha" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Observacion" class="form-label"></label>
+                        <textarea asp-for="Observacion" class="form-control" rows="3" placeholder="Detalles u observaciones del control..."></textarea>
+                        <span asp-validation-for="Observacion" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a asp-action="Index" class="btn btn-secondary">Volver al inicio</a>
+                        <button type="submit" class="btn btn-info text-white"><i class="bi bi-save"></i> Guardar Control</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

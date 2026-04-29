@@ -24,6 +24,19 @@ namespace MiniPlantaJugos.Data
             Maquina maquina3 = new Maquina { Nombre = "Etiquetadora A", Sector = "Terminado", Estado = EstadoMaquina.Detenida, Precio = 30000m };
             context.Maquinas.AddRange(maquina1, maquina2, maquina3);
             context.SaveChanges();
+
+            // Ordenes de Producción
+            OrdenProd orden1 = new OrdenProd { ProductoId = producto1.Id, MaquinaId = maquina1.Id, CantUnidades = 500, Fecha = DateTime.Now.AddDays(-2), Estado = EstadoOrden.Finalizada, Usuario = "Operario Juan" };
+            OrdenProd orden2 = new OrdenProd { ProductoId = producto2.Id, MaquinaId = maquina2.Id, CantUnidades = 1000, Fecha = DateTime.Now.AddDays(-1), Estado = EstadoOrden.EnProceso, Usuario = "Jefe Planta" };
+            OrdenProd orden3 = new OrdenProd { ProductoId = producto1.Id, MaquinaId = maquina1.Id, CantUnidades = 300, Fecha = DateTime.Now, Estado = EstadoOrden.Pendiente, Usuario = "Operario Ana" };
+            context.OrdenesProd.AddRange(orden1, orden2, orden3);
+            context.SaveChanges();
+
+            // Controles de Calidad
+            ControlCalidad control1 = new ControlCalidad { OrdenProdId = orden1.Id, Resultado = ResultadoControl.Aprobado, Fecha = DateTime.Now.AddDays(-1), Observacion = "Todo correcto." };
+            ControlCalidad control2 = new ControlCalidad { OrdenProdId = orden1.Id, Resultado = ResultadoControl.Rechazado, Fecha = DateTime.Now.AddDays(-1).AddHours(2), Observacion = "Lote con color anormal." };
+            context.ControlesCalidad.AddRange(control1, control2);
+            context.SaveChanges();
         }
     }
 }

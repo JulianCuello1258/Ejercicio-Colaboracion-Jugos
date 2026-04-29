@@ -1,0 +1,90 @@
+@model MiniPlantaJugos.Models.OrdenProd
+
+@{
+    ViewData["Title"] = "Detalles de Orden";
+    var controlCalidad = ViewBag.ControlCalidad as MiniPlantaJugos.Models.ControlCalidad;
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Orden de Producción #@Model.Id</h4>
+                <span class="badge bg-light text-dark">@Model.Estado</span>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-sm-4 fw-bold">Producto:</div>
+                    <div class="col-sm-8">@Model.Producto?.Nombre</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4 fw-bold">Máquina:</div>
+                    <div class="col-sm-8">@Model.Maquina?.Nombre</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4 fw-bold">Unidades:</div>
+                    <div class="col-sm-8">@Model.CantUnidades</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4 fw-bold">Fecha Producción:</div>
+                    <div class="col-sm-8">@Model.Fecha.ToShortDateString()</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4 fw-bold">Registrado por:</div>
+                    <div class="col-sm-8">@Model.Usuario</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0">Control de Calidad</h4>
+            </div>
+            <div class="card-body">
+                @if (controlCalidad != null)
+                {
+                    <div class="mb-3">
+                        <strong>Resultado: </strong>
+                        @if (controlCalidad.Resultado == MiniPlantaJugos.Enums.ResultadoControl.Aprobado)
+                        {
+                            <span class="badge bg-success">Aprobado</span>
+                        }
+                        else if (controlCalidad.Resultado == MiniPlantaJugos.Enums.ResultadoControl.Observado)
+                        {
+                            <span class="badge bg-warning text-dark">Observado</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Rechazado</span>
+                        }
+                    </div>
+                    <div class="mb-3">
+                        <strong>Fecha:</strong> @controlCalidad.Fecha.ToShortDateString()
+                    </div>
+                    <div class="mb-3">
+                        <strong>Observación:</strong>
+                        <p class="text-muted">@(string.IsNullOrEmpty(controlCalidad.Observacion) ? "Sin observaciones" : controlCalidad.Observacion)</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-secondary">
+                        Esta producción no tiene un control de calidad registrado.
+                    </div>
+                    @if (Model.Estado == MiniPlantaJugos.Enums.EstadoOrden.Finalizada)
+                    {
+                        <a asp-controller="ControlCalidad" asp-action="Create" asp-route-ordenId="@Model.Id" class="btn btn-sm btn-outline-primary w-100">
+                            Registrar Control
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+</div>

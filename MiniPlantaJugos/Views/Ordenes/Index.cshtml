@@ -1,0 +1,104 @@
+@model IEnumerable<MiniPlantaJugos.Models.OrdenProd>
+
+@{
+    ViewData["Title"] = "Órdenes de Producción";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Órdenes de Producción</h2>
+    <a asp-action="Create" class="btn btn-success"><i class="bi bi-plus-lg"></i> Nueva Orden</a>
+</div>
+
+<div class="card p-4 mb-4">
+    <form asp-action="Index" method="get" class="row g-3 align-items-end">
+        <div class="col-md-3">
+            <label class="form-label">Fecha</label>
+            <input type="date" name="fecha" class="form-control" value="@Context.Request.Query["fecha"]" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Estado</label>
+            <select name="estado" class="form-select" asp-items="ViewBag.Estados">
+                <option value="">Todos</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Producto</label>
+            <select name="productoId" class="form-select" asp-items="ViewBag.Productos">
+                <option value="">Todos</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100"><i class="bi bi-search"></i> Filtrar</button>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Producto</th>
+                        <th>Máquina</th>
+                        <th>Unidades</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model) {
+                        <tr>
+                            <td>#@item.Id</td>
+                            <td>@item.Fecha.ToString("dd/MM/yyyy")</td>
+                            <td>@item.Producto.Nombre</td>
+                            <td>@item.Maquina.Nombre</td>
+                            <td>@item.CantUnidades</td>
+                            <td>
+                                @if(item.Estado == MiniPlantaJugos.Enums.EstadoOrden.Pendiente) {
+                                    <span class="badge bg-warning text-dark badge-estado">@item.Estado</span>
+                                } else if(item.Estado == MiniPlantaJugos.Enums.EstadoOrden.EnProceso) {
+                                    <span class="badge bg-primary badge-estado">@item.Estado</span>
+                                } else if(item.Estado == MiniPlantaJugos.Enums.EstadoOrden.Finalizada) {
+                                    <span class="badge bg-success badge-estado">@item.Estado</span>
+                                } else {
+                                    <span class="badge bg-danger badge-estado">@item.Estado</span>
+                                }
+                            </td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info text-white" title="Detalles">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                @if(item.Estado == MiniPlantaJugos.Enums.EstadoOrden.Pendiente) {
+                                    <form asp-action="ChangeState" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <input type="hidden" name="nuevoEstado" value="@MiniPlantaJugos.Enums.EstadoOrden.EnProceso" />
+                                        <button type="submit" class="btn btn-sm btn-primary" title="Iniciar Proceso"><i class="bi bi-play-fill"></i></button>
+                                    </form>
+                                    <form asp-action="ChangeState" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <input type="hidden" name="nuevoEstado" value="@MiniPlantaJugos.Enums.EstadoOrden.Cancelada" />
+                                        <button type="submit" class="btn btn-sm btn-danger" title="Cancelar"><i class="bi bi-x-circle"></i></button>
+                                    </form>
+                                } else if (item.Estado == MiniPlantaJugos.Enums.EstadoOrden.EnProceso) {
+                                    <form asp-action="ChangeState" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <input type="hidden" name="nuevoEstado" value="@MiniPlantaJugos.Enums.EstadoOrden.Finalizada" />
+                                        <button type="submit" class="btn btn-sm btn-success" title="Finalizar"><i class="bi bi-check-circle"></i></button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    @if(!Model.Any()) {
+                        <tr>
+                            <td colspan="7" class="text-center py-4 text-muted">No se encontraron órdenes.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

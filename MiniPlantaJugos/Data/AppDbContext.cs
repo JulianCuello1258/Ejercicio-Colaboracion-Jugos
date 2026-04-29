@@ -9,6 +9,8 @@ namespace MiniPlantaJugos.Data
 
         public DbSet<Producto> Productos { get; set; }
         public DbSet<Maquina> Maquinas { get; set; }
+        public DbSet<OrdenProd> OrdenesProd { get; set; }
+        public DbSet<ControlCalidad> ControlesCalidad { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -17,6 +19,14 @@ namespace MiniPlantaJugos.Data
             // Conversiones de enum a string
             modelBuilder.Entity<Maquina>()
                 .Property(m => m.Estado)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<OrdenProd>()
+                .Property(o => o.Estado)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<ControlCalidad>()
+                .Property(c => c.Resultado)
                 .HasConversion<string>();
         }
     }

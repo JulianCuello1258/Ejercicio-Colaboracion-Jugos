@@ -1,0 +1,65 @@
+@model MiniPlantaJugos.Models.Usuario
+
+@{
+    ViewData["Title"] = "Crear Usuario";
+}
+
+<h1>Crear Usuario</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Cargo" class="control-label"></label>
+                <select asp-for="Cargo" class="form-control" asp-items="Html.GetEnumSelectList<MiniPlantaJugos.Enums.Cargo>()" id="cargoSelect"></select>
+                <span asp-validation-for="Cargo" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3" id="passwordGroup">
+                <label asp-for="Contrasenia" class="control-label"></label>
+                <input asp-for="Contrasenia" class="form-control" type="text" placeholder="Escribe la contraseña aquí" />
+                <span asp-validation-for="Contrasenia" class="text-danger"></span>
+                <small class="form-text text-muted">Obligatorio solo para Jefes.</small>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        (function() {
+            var cargoSelect = document.getElementById("cargoSelect");
+            var passwordGroup = document.getElementById("passwordGroup");
+
+            function togglePassword() {
+                if (!cargoSelect || !passwordGroup) return;
+                var selectedText = cargoSelect.options[cargoSelect.selectedIndex].text;
+                // Si el texto del cargo contiene "Jefe", mostramos el campo
+                if (selectedText.toLowerCase().indexOf("jefe") !== -1) {
+                    passwordGroup.style.display = "block";
+                } else {
+                    passwordGroup.style.display = "none";
+                    var input = passwordGroup.querySelector("input");
+                    if (input) input.value = "";
+                }
+            }
+            
+            if (cargoSelect) {
+                cargoSelect.addEventListener("change", togglePassword);
+                // Ejecutar inmediatamente y también con un pequeño delay por si el DOM tarda
+                togglePassword();
+                setTimeout(togglePassword, 100);
+            }
+        })();
+    </script>
+}

@@ -14,6 +14,12 @@ namespace MiniPlantaJugos.Models
         [Display(Name = "Sector")]
         public string Sector { get; set; } = string.Empty;
 
+        [Display(Name = "Planta")]
+        public string Planta { get; set; } = string.Empty;
+
+        [Display(Name = "Número de Máquina")]
+        public int NumeroMaquina { get; set; }
+
         [Display(Name = "Estado")]
         public EstadoMaquina Estado { get; set; } = EstadoMaquina.Operativa;
 

@@ -1,0 +1,46 @@
+@model MiniPlantaJugos.Models.Incidente
+
+@{
+    ViewData["Title"] = "Detalles del Incidente";
+}
+
+<h1>Detalles del Incidente</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Maquina)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Maquina.Nombre) (Planta: @Html.DisplayFor(model => model.Maquina.Planta), Sector: @Html.DisplayFor(model => model.Maquina.Sector), Nro: @Html.DisplayFor(model => model.Maquina.NumeroMaquina))
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Severidad)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Severidad)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Estado)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Estado)
+        </dd>
+        <dt class = "col-sm-2">
+            Reportado Por
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Usuario.Nombre) (@Html.DisplayFor(model => model.Usuario.Cargo))
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Volver a la lista</a>
+</div>

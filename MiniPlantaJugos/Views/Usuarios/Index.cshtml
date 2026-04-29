@@ -1,0 +1,31 @@
+@model IEnumerable<MiniPlantaJugos.Models.Usuario>
+
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<h1>Usuarios</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Nuevo Usuario</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Cargo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>@item.Nombre</td>
+            <td>@item.Cargo</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id">Detalles</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

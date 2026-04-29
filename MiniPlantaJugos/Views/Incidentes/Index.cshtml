@@ -1,0 +1,45 @@
+@model IEnumerable<MiniPlantaJugos.Models.Incidente>
+
+@{
+    ViewData["Title"] = "Incidentes";
+}
+
+<h1>Incidentes</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Reportar Nuevo Incidente</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Máquina</th>
+            <th>Descripción</th>
+            <th>Severidad</th>
+            <th>Estado</th>
+            <th>Reportado Por</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>@item.Maquina?.Nombre</td>
+            <td>@item.Descripcion</td>
+            <td>@item.Severidad</td>
+            <td>@item.Estado</td>
+            <td>@item.Usuario?.Nombre</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id">Detalles</a>
+                @if(item.Estado == MiniPlantaJugos.Enums.EstadoIncidente.Abierto)
+                {
+                    <text> | </text>
+                    <form asp-action="Resolver" asp-route-id="@item.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-success">Marcar Resuelto</button>
+                    </form>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
